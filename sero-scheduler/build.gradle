@@ -8,6 +8,10 @@ targetCompatibility = JavaVersion.VERSION_1_8
 group = 'lohbihler'
 version = '1.1.0'
 
+configurations {
+	deployerJars
+}
+
 repositories {
     jcenter()
     mavenLocal()
@@ -19,6 +23,7 @@ dependencies {
 
     testCompile 'junit:junit:4.+'
     testCompile 'org.slf4j:slf4j-simple:[1.7.0,1.8)'
+    deployerJars 'org.apache.maven.wagon:wagon-http:2.2'
 }
 
 task sourceJar(group: 'build', type: Jar, dependsOn: classes) {
@@ -36,6 +41,15 @@ publishing {
             
             artifact sourceJar {
                 classifier "sources"
+            }
+        }
+    }
+    repositories {
+    	maven { 
+    	    url "https://maven.mangoautomation.net/repository/ias-release"
+            credentials {
+            	username = "${iasUsername}"
+            	password = "${iasPassword}"
             }
         }
     }
